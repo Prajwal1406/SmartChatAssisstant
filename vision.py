@@ -14,12 +14,12 @@ genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 def upload_to_gemini(path, mime_type=None):
     """Uploads the given file to Gemini."""
     file = genai.upload_file(path, mime_type=mime_type)
-    print(f"Uploaded file '{file.display_name}' as: {file.uri}")
+    # print(f"Uploaded file '{file.display_name}' as: {file.uri}")
     return file
 
 def wait_for_files_active(files):
     """Waits for the given files to be active."""
-    print("Waiting for file processing...")
+    # print("Waiting for file processing...")
     for name in (file.name for file in files):
         file = genai.get_file(name)
         while file.state.name == "PROCESSING":
@@ -28,8 +28,8 @@ def wait_for_files_active(files):
             file = genai.get_file(name)
         if file.state.name != "ACTIVE":
             raise Exception(f"File {file.name} failed to process")
-    print("...all files ready")
-    print()
+    # print("...all files ready")
+    # print()
 
 def get_gemini_response(input, image):
     context = """Generates a response based on the image and input prompt."""
@@ -41,10 +41,10 @@ def get_gemini_response(input, image):
         response = model.generate_content(image)
     return response.text
 
-def visito():
+def visoto():
     """Main function to run the Streamlit app."""
-    st.title("Gemini Image Demo")
-    st.header("Image Chat Assistant")
+    st.title = "Gemini Image Demo"
+    st.header ="Image Chat Assistant" 
     input = st.text_input("Input Prompt: ", key="input")
     uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
     image = ""   
@@ -57,5 +57,5 @@ def visito():
         st.subheader("The Response is")
         st.write(response)
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
