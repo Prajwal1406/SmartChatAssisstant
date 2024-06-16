@@ -81,7 +81,7 @@ def user_input(user_question):
 
 
 
-def main():
+def docu():
     st.header = "Chat with Your Documents💁"
 
     user_question = st.text_input("Ask a Question from the PDF Files")
@@ -101,5 +101,5 @@ def main():
 
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()

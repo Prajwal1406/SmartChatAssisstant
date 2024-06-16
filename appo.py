@@ -1,47 +1,72 @@
-from dotenv import load_dotenv
-
-load_dotenv()  # take environment variables from .env.
-
 import streamlit as st
 import os
 import pathlib
 import textwrap
-
 import google.generativeai as genai
+from dotenv import load_dotenv
 
-from IPython.display import display
-from IPython.display import Markdown
+def fasto():
+    # Load environment variables from .env
+    load_dotenv()
+    os.getenv("GOOGLE_API_KEY")
+    genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+    # App title
+    st.title= "Fast Response"
 
+    # Initialize the Gemini model
+    model = genai.GenerativeModel('gemini-1.5-flash')
 
-def to_markdown(text):
-  text = text.replace('•', '  *')
-  return Markdown(textwrap.indent(text, '> ', predicate=lambda _: True))
+    # Store generated responses
+    if "messages" not in st.session_state.keys():
+        st.session_state.messages = [{"role": "assistant", "content": "How may I assist you?"}]
 
-os.getenv("GOOGLE_API_KEY")
-genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+    # Create two columns
+    col1, col2 = st.columns([3, 1])
 
-## Function to load OpenAI model and get respones
+    # User-provided prompt and chat messages in the left column
+    with col1:
+        # Display chat messages
+        for message in st.session_state.messages:
+            with st.chat_message(message["role"]):
+                st.write(message["content"])
 
-def get_gemini_response(question):
-    model = genai.GenerativeModel('gemini-pro')
-    response = model.generate_content(question)
-    return response.text
+        # User-provided prompt
+        prompt = st.text_input("Enter your prompt:")
 
-##initialize our streamlit app
+        if prompt:
+            st.session_state.messages.append({"role": "user", "content": prompt})
+            with st.chat_message("user"):
+                st.write(prompt)
 
-st.set_page_config(page_title="Q&A Demo")
+            # Generate a new response if last message is not from assistant
+            if st.session_state.messages[-1]["role"] != "assistant":
+                with st.chat_message("assistant"):
+                    with st.spinner("Thinking..."):
+                        response = model.generate_content(prompt)
+                        st.write(response.text) 
+                message = {"role": "assistant", "content": response.text}
+                st.session_state.messages.append(message)
 
-st.header("Gemini Application")
+    # Select box for user role in the right column
+    with col2:
+        role = st.selectbox(
+            "Select your role:",
+            ("Doctor", "Electronic Expert", "Lawyer", "Chef"),
+            index=None,
+            placeholder="Select a role...",
+        )
 
-input=st.text_input("Input: ",key="input")
+        # Predefined chat prompt templates
+        templates = {
+            "Doctor": "As a doctor, I can help you with medical advice.",
+            "Electronic Expert": "As an electronic expert, I can help you with electronic devices.",
+            "Lawyer": "As a lawyer, I can help you with legal advice.",
+            "Chef": "As a chef, I can help you with cooking advice.",
+        }
 
+        # Add the selected role's template to the prompt
+        if role in templates:
+            prompt += " " + templates[role]
 
-submit=st.button("Ask the question")
-
-## If ask button is clicked
-
-if submit:
-    
-    response=get_gemini_response(input)
-    st.subheader("The Response is")
-    st.write(response)
+if __name__ == "__main__":
+    fasto()

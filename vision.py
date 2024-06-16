@@ -29,7 +29,7 @@ def visoto():
 
     st.title="Gemini Image Demo"
 
-    st.header("Image Chat Assistant")
+    st.header ="Image Chat Assistant"
     input=st.text_input("Input Prompt: ",key="input")
     uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
     image=""   
