@@ -13,10 +13,11 @@ from PIL import Image
 
 
 import google.generativeai as genai
-
+context = "Write an explanation based on the image and give detailed and helpful explaination to the question asked"
 def get_gemini_response(input,image):
         model = genai.GenerativeModel('gemini-pro-vision')
         if input!="":
+            input+=context
             response = model.generate_content([input,image])
         else:
             response = model.generate_content(image)
