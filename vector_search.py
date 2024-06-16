@@ -33,7 +33,7 @@ ensure_index_exists()
 index = pc.Index(index_name)
 vectorstore = PineconeVectorStore(index_name=index_name, embedding=SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2"))
 # load the corpus and encode each chunks
-def encodeaddData(corpusData, url, pdf, pdf2):
+def encodeaddData(corpusData, url, pdf, pdf2,uns2):
     #id = index.describe_index_stats()["total_vector_count"]
     if url:
         class Document:
@@ -68,6 +68,24 @@ def encodeaddData(corpusData, url, pdf, pdf2):
 
         # Now you can create the vector store with the properly structured documents
         vectorstore = PineconeVectorStore.from_documents(documents, embeddings, index_name=index_name)
+    
+#     if uns:
+#         class Document:
+#             def __init__(self, page_content, metadata):
+#                 self.page_content = page_content
+#                 self.metadata = metadata
+
+# # Create a list of Document objects
+#         documents = [Document(text, {}) for text in corpusData]
+
+#         # Now you can create the vector store with the properly structured documents
+#         vectorstore = PineconeVectorStore.from_documents(documents, embeddings, index_name=index_name)
+
+    if uns2:
+        texts = corpusData
+
+    # Now you can create the vector store with the properly structured documents
+        vectorstore = PineconeVectorStore.from_documents(texts, embeddings, index_name=index_name)
         
 
 def delete():
