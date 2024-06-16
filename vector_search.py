@@ -79,5 +79,5 @@ def delete():
 def find_k_best_match1(query):        
     vectorstore = PineconeVectorStore(index_name=index_name, embedding=embeddings)
     docs = vectorstore.similarity_search(query)
-    print(docs)
+    # print(docs)
     return docs
