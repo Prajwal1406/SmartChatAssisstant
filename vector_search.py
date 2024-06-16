@@ -78,6 +78,6 @@ def delete():
 #     return [result['matches'][i]['metadata']['title'] for i in range(k)],[result['matches'][i]['metadata']['context'] for i in range(k)]
 def find_k_best_match1(query):        
     vectorstore = PineconeVectorStore(index_name=index_name, embedding=embeddings)
-    docs = vectorstore.similarity_search(query)
+    docs = vectorstore.similarity_search(query,k=2)
     # print(docs)
     return docs
