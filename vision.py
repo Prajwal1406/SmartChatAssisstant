@@ -41,7 +41,7 @@ def get_gemini_response(input, image):
         response = model.generate_content(image)
     return response.text
 
-def main():
+def visito():
     """Main function to run the Streamlit app."""
     st.title("Gemini Image Demo")
     st.header("Image Chat Assistant")
