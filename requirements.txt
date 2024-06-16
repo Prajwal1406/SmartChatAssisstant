@@ -3,7 +3,6 @@ langchain==0.2.5
 langchain_community==0.2.5
 langchain_google_genai==1.0.6
 langchain_pinecone==0.1.1
-openai==0.27.10
 pdfplumber==0.11.1
 Pillow==10.3.0
 pinecone==4.0.0
