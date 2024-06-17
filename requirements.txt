@@ -16,3 +16,4 @@ PyMuPDF
 pdf2image
 pandas
 unstructured[all-docs]
+opencv-python-headless

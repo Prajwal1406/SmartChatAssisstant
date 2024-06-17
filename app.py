@@ -6,6 +6,7 @@ from langchain_community.document_loaders import UnstructuredFileLoader
 from documentchat import get_text_chunks,get_pdf_text
 from vector_search import encodeaddData,find_k_best_match1,delete,ensure_index_exists
 from utils import *
+import cv2
 from io  import StringIO
 from dotenv import load_dotenv
 from io import StringIO
