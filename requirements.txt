@@ -1,6 +1,5 @@
 beautifulsoup4==4.12.3
 langchain==0.2.5
-langchain_community==0.2.5
 langchain_google_genai==1.0.6
 langchain_pinecone==0.1.1
 pdfplumber==0.11.1
@@ -12,3 +11,8 @@ python-dotenv==1.0.1
 Requests==2.32.3
 sentence_transformers==3.0.1
 streamlit==1.29.0
+langchain_community
+PyMuPDF
+pdf2image
+pandas
+unstructured[all-docs]
