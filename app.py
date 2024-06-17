@@ -1,5 +1,5 @@
 import streamlit as st
-import openai
+import tempfile
 from pinecone import ServerlessSpec
 import qanda
 from langchain_community.document_loaders import UnstructuredFileLoader
@@ -13,7 +13,15 @@ from io import StringIO
 import os
 from pinecone.grpc import PineconeGRPC as pinecone
 def fasto():
+
     ensure_index_exists()
+    def get_loader(file_path):
+        file_extension = os.path.splitext(file_path)[1].lower()
+        if file_extension in ['.pdf', '.txt', '.html', '.htm', '.docx', '.pptx', '.jpg', '.jpeg', '.png', '.gif']:
+            return UnstructuredFileLoader(file_path, mode="elements")
+        else:
+            raise ValueError(f"Unsupported file type: {file_extension}")
+    
     _ , col2,_ = st.columns([1,7,1])
     with col2:
         col2 = st.header="Simplchat: Chat with your data"
@@ -38,7 +46,7 @@ def fasto():
         elif options == 'Unstructured Data':
             # uns = st.text_input("Enter your File link here") 
             st.write("choose .* from your local machine")
-            uns2 = st.text_input("Enter list of files location")
+            uns2 = st.file_uploader("Enter any file", accept_multiple_files=True)
             query = st.text_input("Enter your query")
             button = st.button("Submit")
         elif options == 'Existing data source':
@@ -90,10 +98,42 @@ def fasto():
 
     if button and uns2:
         with st.spinner("Updating the database..."):
-           
-            loader = UnstructuredFileLoader([uns2],mode="elements")
-            corpusData = loader.load()
-            encodeaddData(corpusData, pdf=False, url=False, pdf2=None,uns2 = uns2)
+            page_content = ""  # Initialize as string
+            metadata = {}  # Initialize an empty dictionary for metadata
+            
+            for uploaded_file in uns2:
+                # Create a temporary file to save the uploaded file
+                with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(uploaded_file.name)[1]) as temp_file:
+                    temp_file.write(uploaded_file.getvalue())
+                    temp_file_path = temp_file.name
+
+                try:
+                    # Get the appropriate loader based on file type
+                    loader = get_loader(temp_file_path)
+                    docs = loader.load()
+
+                    # Extract and concatenate the loaded documents' content
+                    for doc in docs:
+                        if hasattr(doc, 'page_content'):
+                            page_content += doc.page_content + "\n"  # Concatenate page_content
+                        else:
+                            st.warning(f"Document object has no 'page_content' attribute: {doc}")
+
+                        # Example of setting metadata (adjust as needed)
+                        metadata['uploaded_files'] = uns2  # Store the uploaded files information
+                        metadata['loader_used'] = str(loader)  # Store the loader information
+
+                except ValueError as e:
+                    st.error(str(e))
+                finally:
+                    # Delete the temporary file
+                    os.remove(temp_file_path)
+
+            # Create document data with page_content and metadata
+            document_data = {'page_content': page_content, 'metadata': metadata}
+            metadata = document_data['metadata']
+            corpusData = document_data['page_content']
+            encodeaddData(corpusData, pdf=False, url=False, pdf2=None,uns2=metadata['uploaded_files'])
             st.success("Database Updated")
 
         with st.spinner("Finding an answer..."):
