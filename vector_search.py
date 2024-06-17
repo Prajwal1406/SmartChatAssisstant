@@ -82,9 +82,9 @@ def encodeaddData(corpusData, url, pdf, pdf2,uns2):
 #         vectorstore = PineconeVectorStore.from_documents(documents, embeddings, index_name=index_name)
 
     if uns2:
+        
         texts = corpusData
 
-    # Now you can create the vector store with the properly structured documents
         vectorstore = PineconeVectorStore.from_documents(texts, embeddings, index_name=index_name)
         
 
