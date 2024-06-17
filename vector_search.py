@@ -4,6 +4,7 @@ from langchain_pinecone import PineconeVectorStore
 from langchain_community.embeddings import SentenceTransformerEmbeddings
 from sentence_transformers import SentenceTransformer
 from dotenv import load_dotenv
+import time
 import os
 
 load_dotenv()
@@ -51,7 +52,8 @@ def encodeaddData(corpusData, url, pdf, pdf2, uns2):
 def delete():
     pc.delete_index(index_name)
 
-def find_k_best_match1(query):        
+def find_k_best_match1(query): 
+    time.sleep(5)        
     vectorstore = PineconeVectorStore(index_name=index_name, embedding=embeddings)
     docs = vectorstore.similarity_search(query, k=2)
     return docs
