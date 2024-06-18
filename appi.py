@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 from io import StringIO
 import os
 from pinecone.grpc import PineconeGRPC as pinecone
+import cv2
 def fasto():
 
     ensure_index_exists()
