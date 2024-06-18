@@ -123,7 +123,7 @@ def fasto():
                         metadata['loader_used'] = str(loader)  # Store the loader information
 
                 except ValueError as e:
-                    st.warning("Still in development")
+                    st.warning(str(e))
                 finally:
                     # Delete the temporary file
                     os.remove(temp_file_path)
