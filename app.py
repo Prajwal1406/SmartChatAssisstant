@@ -17,7 +17,7 @@ def fasto():
     ensure_index_exists()
     def get_loader(file_path):
         file_extension = os.path.splitext(file_path)[1].lower()
-        if file_extension in ['.pdf', '.txt', '.html', '.htm', '.docx', '.pptx', '.jpg', '.jpeg', '.png', '.gif']:
+        if file_extension in ['.pdf', '.txt', '.html', '.htm', '.docx', '.pptx', '.jpg', '.jpeg', '.png', '.gif','.xlsx']:
             return UnstructuredFileLoader(file_path, mode="elements")
         else:
             raise ValueError(f"Unsupported file type: {file_extension}")
